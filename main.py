@@ -17,6 +17,19 @@
     Stage 4
         Fix format of locally stored json data
             #done. Added parameters sort_keys=True and indent=4 to json.dump
+            -successfully parse the data
+            #changed json data stored locally into a json file for easier
+            conversion/deconversion. Makes sense, more file nativity.
+            #successfully accessed data through json.load and created a python
+            dict object.
+            #figured out how to parse json data
+            #SUCCESS
+    Stage 5
+        Create a dict with business names and their business status as a key_value
+        pair and store them locally.
+    Stage 6
+        Check the key value pairs against themselves for a future feature update
+
 '''
 
 import json
@@ -32,6 +45,14 @@ find_place = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
              + '&key=' + api_key)
 
 
-with requests.get(find_place) as response:
-    with open('data.txt', 'w') as f:
+'''with requests.get(find_place) as response:
+    with open('data.json', 'w') as f:
         json.dump(response.json(), f, sort_keys=True, indent=4)
+'''
+
+with open('data.json', 'r') as f:
+    dict = json.load(f)
+
+for x in dict['results']:
+    print(json.dumps(x['name']))
+    print(json.dumps(x['business_status']))
