@@ -14,6 +14,9 @@
             it within the same file. Adds security.
             #SUCCESS. Received JSON response and downloaded to local machine.
             -fix data formatting on local machine
+    Stage 4
+        Fix format of locally stored json data
+            #done. Added parameters sort_keys=True and indent=4 to json.dump
 '''
 
 import json
@@ -31,4 +34,4 @@ find_place = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
 
 with requests.get(find_place) as response:
     with open('data.txt', 'w') as f:
-        json.dump(response.json(), f)
+        json.dump(response.json(), f, sort_keys=True, indent=4)
