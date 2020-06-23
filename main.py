@@ -5,13 +5,30 @@
             my web browser. The return is a json page with my completed search
             query
     Stage 2
-        Set up search criteria 
+        Set up search criteria
+    Stage 3
+        Store search results locally
+            #fixed the format of find_places object. Had to concatenate the string
+            using parenthesis and '+'
+            #created a separate text file to store the API_key instead of keeping
+            it within the same file. Adds security.
+            #SUCCESS. Received JSON response and downloaded to local machine.
+            -fix data formatting on local machine
 '''
 
-api_key = 'AIzaSyARrE3VPSm9UHGHVu4VY7DuzxQBtOtXst0'
+import json
+import requests
 
-find_place = https://maps.googleapis.com/maps/api/place/nearbysearch/json?
-             location=37.866530,-122.263210
-             &radius=1600
-             &keyword=hair%20cut
-             &key=api_key
+with open('api_key.txt', 'r') as f:
+    api_key = f.readline()
+
+find_place = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
+             + 'location=37.866530,-122.263210'
+             + '&radius=1600'
+             + '&keyword=hair%20cut'
+             + '&key=' + api_key)
+
+
+with requests.get(find_place) as response:
+    with open('data.txt', 'w') as f:
+        json.dump(response.json(), f)
