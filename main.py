@@ -53,8 +53,10 @@
             itself.
             Successfully import dict and test to see if all files are created/deleted
             correctly(check "First start")
+                -Having trouble importing salon_status from another file
+            #works 
     Stage 7
-            #had to split up the stages because Stage 6 was the most difficult stage yet 
+            #had to split up the stages because Stage 6 was the most difficult stage yet
         Check the imported values against the newest values from the newest API call
 
         Create a log beneath the dictionary that exists in status.py
@@ -65,7 +67,6 @@ import json
 import requests
 import os.path
 import os
-from status import salon_status
 
 with open('api_key.txt', 'r') as f:
     api_key = f.readline()
@@ -76,29 +77,25 @@ find_place = ('https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
              + '&keyword=hair%20cut'
              + '&key=' + api_key)
 
-'''
-if os.path.exists('data.json'):
+
+'''if os.path.exists('data.json'):
     os.remove('data.json')
 
 with requests.get(find_place) as response:
     with open('data.json', 'w') as f:
         json.dump(response.json(), f, sort_keys=True, indent=4)
+
 '''
 
 with open('data.json', 'r') as f:
     response_dict = json.load(f)
 
-if not 'salon_status' in globals():
-    salon_status={}
-
-for x in response_dict['results']:
-    salon_status[x['name']] = x['business_status']
-    #print(json.dumps(x['name']))
-    #print(json.dumps(x['business_status']))
-
 if not os.path.exists('status.py'):
+    salon_status={}
+    for x in response_dict['results']:
+        salon_status[x['name']] = x['business_status']
     with open('status.py', 'w') as f:
         f.write('salon_status= ')
         json.dump(salon_status, f, sort_keys=True, indent=4)
-        #for x in salon_status:
-            #f.write(x + ' ---> ' + salon_status[x] + '\n')
+else:
+    from status.py import salon_status
