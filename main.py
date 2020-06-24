@@ -37,7 +37,27 @@
             -this requires reruning the API call and creation of a new file to
             re-parse through.
             #success
-        If business status has changed, create a log file to document the change.
+            #added checking of file and deletion of file so that data can be updated
+        ~Do I store the data as a plaintext or as a python dict?
+            Python dict allows me to update the entries
+            Json file format as well
+            Plain text does not
+            Python cannot talk to json directly but has to be converted,
+            so working with a python dict would be the path of least resistance.
+            #stored as python file called status.py
+            #figured out how to negate a function or file call in a conditional
+            statement: use not.
+        ~UP~DATE
+            A dictionary containing all business names and status is created and
+            written to status.py. I can now import this dict and check it against
+            itself.
+            Successfully import dict and test to see if all files are created/deleted
+            correctly(check "First start")
+    Stage 7
+            #had to split up the stages because Stage 6 was the most difficult stage yet 
+        Check the imported values against the newest values from the newest API call
+
+        Create a log beneath the dictionary that exists in status.py
 
 '''
 
@@ -45,7 +65,7 @@ import json
 import requests
 import os.path
 import os
-
+from status import salon_status
 
 with open('api_key.txt', 'r') as f:
     api_key = f.readline()
@@ -68,14 +88,17 @@ with requests.get(find_place) as response:
 with open('data.json', 'r') as f:
     response_dict = json.load(f)
 
-salon_status={}
+if not 'salon_status' in globals():
+    salon_status={}
 
 for x in response_dict['results']:
     salon_status[x['name']] = x['business_status']
     #print(json.dumps(x['name']))
     #print(json.dumps(x['business_status']))
 
-if !os.path.exists('results.py'):
-    with open('results.py', 'w') as f:
-        for x in salon_status:
-            f.write(x + ' ---> ' + salon_status[x] + '\n')
+if not os.path.exists('status.py'):
+    with open('status.py', 'w') as f:
+        f.write('salon_status= ')
+        json.dump(salon_status, f, sort_keys=True, indent=4)
+        #for x in salon_status:
+            #f.write(x + ' ---> ' + salon_status[x] + '\n')
